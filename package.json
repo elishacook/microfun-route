@@ -1,0 +1,21 @@
+{
+  "name": "microfun-route",
+  "version": "1.0.0",
+  "description": "Single page routing for microfun",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "author": "Elisha Fitch-Cook <elisha@elishacook.com> (https://github.com/elishacook)",
+  "license": "MIT",
+  "repository": "elishacook/microfun-route",
+  "peerDependencies": {
+    "microfun": "^1.1.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0"
+  }
+}
