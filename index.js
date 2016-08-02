@@ -12,7 +12,6 @@ module.exports = function (node, routes, channels)
     },
     routes: categorize_routes(routes)
   }
-  model = route_from_hash(model, location.hash)
   
   if (!channels)
   {
@@ -25,10 +24,17 @@ module.exports = function (node, routes, channels)
 
 function view (model, signal)
 {
-  return model.current.component.view(
-    model[model.current.path],
-    signal.map(model.current.path)
-  )
+  if (model.current.component)
+  {
+    return model.current.component.view(
+      model[model.current.path],
+      signal.map(model.current.path)
+    )
+  }
+  else
+  {
+    return microfun.h('div')
+  }
 }
 
 function categorize_routes (routes)
@@ -67,15 +73,17 @@ function parameterized_route_matcher (path)
 
 function location_change (signal)
 {
-  var route_from_hash_signal = signal(route_from_hash)
+  var route_from_hash_signal = signal(route_from_hash.bind(null, signal))
   
   window.addEventListener('hashchange', function (e)
   {
     route_from_hash_signal(window.location.hash)
   })
+  
+  route_from_hash_signal(window.location.hash)
 }
 
-function route_from_hash (model, hash)
+function route_from_hash (signal, model, hash)
 {
   var path = "/"
   
@@ -90,11 +98,15 @@ function route_from_hash (model, hash)
     throw new Error("No handler for route '"+path+"'")
   }
   
-  var update = {}
-  if (!model[path])
+  if (model.current.component && model.current.component.exit)
   {
-    update[path] = match.component.init ? match.component.init.apply(null, match.args) : null
+    model.current.component.onexit(model[path])
   }
+  
+  var init = match.component.init
+  var init_args = [signal].concat(match.args)
+  var update = {}
+  update[path] = init ? init.apply(null, init_args) : null
   update.current = match
   
   return Object.assign({}, model, update)
