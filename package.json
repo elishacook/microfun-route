@@ -1,6 +1,6 @@
 {
   "name": "microfun-route",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Single page routing for microfun",
   "main": "index.js",
   "scripts": {
