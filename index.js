@@ -104,7 +104,7 @@ function route_from_hash (signal, model, hash)
   }
   
   var init = match.component.init
-  var init_args = [signal].concat(match.args)
+  var init_args = [signal.map(path)].concat(match.args)
   var update = {}
   update[path] = init ? init.apply(null, init_args) : null
   update.current = match
